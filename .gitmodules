@@ -1,0 +1,6 @@
+[submodule "InfiniteVariety_exp_backend"]
+	path = InfiniteVariety_exp_backend
+	url = https://github.com/hrtwt/InfiniteVariety_exp_backend
+[submodule "backend"]
+	path = backend
+	url = https://github.com/hrtwt/InfiniteVariety_exp_backend
