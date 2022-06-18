@@ -1,50 +1,126 @@
-function hideNextButton(){
-    document.getElementById('next_button').style.opacity = 0.3;
+function hideNextButton() {
+  document.getElementById("next_button").style.opacity = 0.3;
 }
-function showNextButton(){
-    document.getElementById('next_button').style.opacity = 1.0;
+function showNextButton() {
+  document.getElementById("next_button").style.opacity = 1.0;
 }
 
-window.addEventListener('load', function() {
-    
-    // document.getElementById('src2').innerHTML='<pre class="line-numbers"><code class="language-Java" id="src2">System.out.println()</code></pre>';
-    const source_id = document.getElementById('source_id');
-    const next_button = document.querySelector("#next_button");
-    next_button.disabled = true;
-    const same_button = document.querySelector("#same_button");
-    const diff_button = document.querySelector("#diff_button");
-    const unknow_button = document.querySelector("#unknow_button");
+function updateSourceID(id) {
+  const source_id = document.getElementById("source_id");
+  source_id.innerHTML = String(id);
+}
 
-    hideNextButton();
+function disableNextButton() {
+  next_button.disabled = true;
+  hideNextButton();
+}
 
-    let ret;
+function enableNextButton() {
+  next_button.disabled = false;
+  showNextButton();
+}
 
-    same_button.addEventListener("click",()=>{
-        // const src = 'if (true) System.out.println();';
-        // let code = Prism.highlight(src,Prism.languages.java,'java');
-        // document.getElementById('source_code1').innerHTML= code;
-        // console.log(code);
-        showNextButton();
-        next_button.disabled = false;
-        ret = "o";
+async function init(next_button) {}
+
+async function getSourceCode(nextID) {
+  ret = fetch("http://localhost:8080/source?id=" + String(nextID), {
+    mode: "cors",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        console.log("NODATA");
+        throw new Error();
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
     });
+  return ret;
+}
 
-    diff_button.addEventListener("click",()=>{
-        showNextButton();
-        next_button.disabled = false;
-        ret = "x";
+async function getNextID(user) {
+  ret = fetch("http://localhost:8080/next?user=" + user, {
+    mode: "cors",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        console.log("NODATA");
+        throw new Error();
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
     });
+  return ret;
+}
 
-    unknow_button.addEventListener("click",()=>{
-        showNextButton();
-        next_button.disabled = false;
-        ret = "k";
-    });
+function post(xhr,local_url,result){
+    // xhr.open('POST',local_url+"/result?id=7&user=wata -d '"+result+"'");
+    // xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    // xhr.send(result);
+}
 
-    next_button.addEventListener("click",() => {
-        next_button.disabled = true;
-        hideNextButton();
-        source_id.innerHTML = "5";
-        this.alert(ret);
-    });
+function updateAns(ans) {
+  document.getElementById("selected_ans").innerHTML = ans;
+}
+
+// async function updateSourceCode
+
+window.addEventListener("load", function () {
+  // document.getElementById('src2').innerHTML='<pre class="line-numbers"><code class="language-Java" id="src2">System.out.println()</code></pre>';
+  const next_button = document.querySelector("#next_button");
+  // next_button.disabled = true;
+  const same_button = document.querySelector("#same_button");
+  const diff_button = document.querySelector("#diff_button");
+  const unknow_button = document.querySelector("#unknow_button");
+
+  const local_url = "http://localhost:8080/";
+
+  init(next_button);
+
+  let xhr = new XMLHttpRequest();
+
+  // hideNextButton();
+
+  let ret;
+
+  same_button.addEventListener("click", () => {
+    enableNextButton();
+    updateAns("Same");
+    ret = "o";
+  });
+
+  diff_button.addEventListener("click", () => {
+    enableNextButton();
+    updateAns("Differ");
+    ret = "x";
+  });
+
+  unknow_button.addEventListener("click", () => {
+    enableNextButton();
+    updateAns("Unknown");
+    ret = "k";
+  });
+
+  next_button.addEventListener("click", async () => {
+    let user_name = document.getElementById("user_name").value;
+
+    // ここにPOSTの処理を挟む
+    post(xhr,local_url,ret);
+
+    let nextID = await getNextID(user_name);
+    updateSourceID(nextID);
+    let res = await getSourceCode(nextID);
+    let src1 = res["code1"];
+    let src2 = res["code2"];
+    let code1 = Prism.highlight(src1, Prism.languages.java, "java");
+    let code2 = Prism.highlight(src2, Prism.languages.java, "java");
+    document.getElementById("source_code1").innerHTML = code1;
+    document.getElementById("source_code2").innerHTML = code2;
+    updateAns("");
+
+    disableNextButton();
+  });
 });
