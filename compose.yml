@@ -1,0 +1,26 @@
+services:
+  frontend:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: infinite_variety_exp
+    restart: always
+    ports:
+      - 3080:80
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
+  backend:
+    build:
+      context: ./backend/
+      dockerfile: ./backend/Dockerfile
+    image: infinite_variety_exp
+    # volumes:
+    #   - type: bind
+    #     source: ./util/HealthCheck.java
+    #     target: /HealthCheck.java
+    #     read_only: true
+    # restart: always
+    # healthcheck:
+    #   test: ["CMD", "java", "/HealthCheck.java", "||", "exit", "1"]
+    #   start_period: 30s
