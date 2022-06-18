@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      target: dev
+    volumes:
+      - type: bind
+        source: ./src/
+        target: /usr/share/nginx/html/
+    command:
+      - nginx-debug
+      - -g
+      - daemon off;
