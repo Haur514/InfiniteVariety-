@@ -23,7 +23,7 @@ function enableNextButton() {
 async function init(next_button) {}
 
 async function getSourceCode(nextID) {
-  ret = fetch("http://localhost:8080/source?id=" + String(nextID), {
+  ret = fetch("http://localhost:3080/api/source?id=" + String(nextID), {
     mode: "cors",
   })
     .then((response) => {
@@ -40,7 +40,7 @@ async function getSourceCode(nextID) {
 }
 
 async function getNextID(user) {
-  ret = fetch("http://localhost:8080/next?user=" + user, {
+  ret = fetch("http://localhost:3080/api/next?user=" + user, {
     mode: "cors",
   })
     .then((response) => {
@@ -76,7 +76,7 @@ window.addEventListener("load", function () {
   const diff_button = document.querySelector("#diff_button");
   const unknow_button = document.querySelector("#unknow_button");
 
-  const local_url = "http://localhost:8080/";
+  const local_url = "http://localhost:3080/api/";
 
   init(next_button);
 
