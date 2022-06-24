@@ -5,7 +5,7 @@ services:
     volumes:
       - type: bind
         source: ./src/
-        target: /usr/share/nginx/html/
+        target: /etc/nginx/html/
     command:
       - nginx-debug
       - -g

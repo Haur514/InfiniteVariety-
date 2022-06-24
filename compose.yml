@@ -2,8 +2,7 @@ services:
   frontend:
     build:
       context: ./
-      dockerfile: ./Dockerfile
-    image: infinite_variety_exp
+    image: infinite_variety_exp-frontend
     restart: always
     ports:
       - 3080:80
@@ -13,8 +12,7 @@ services:
   backend:
     build:
       context: ./backend/
-      dockerfile: ./backend/Dockerfile
-    image: infinite_variety_exp
+    image: infinite_variety_exp-backend
     # volumes:
     #   - type: bind
     #     source: ./util/HealthCheck.java
