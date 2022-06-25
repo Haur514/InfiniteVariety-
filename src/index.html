@@ -11,6 +11,18 @@
 
 <body>
 
+<div class="titlePage" id="title">
+    <div class="alert_not_forget_time_measure">時間の計測を忘れないでください</div>
+    <br>
+    <spam color="white">回答者を選択してください：</spam>
+    <select id="user_name" class="user_field">
+        <option value="h-watanb">渡辺</option>
+        <option value="r-takaic">髙市</option>
+        <option value="h-yosiok">吉岡</option>
+    </select><br><br>
+    <button type="button" id="ready_button" class="ready_button">準備完了</button>
+</div>
+
 <!-- ソースコードIDとユーザ選択をする行 -->
 <div class="srcID_user_field">
     <div class="current_id">
@@ -19,15 +31,10 @@
     <div class="current_ans">
         現在の解答 : <span id="selected_ans"></span>
     </div>
-    <select id="user_name" class="user_field">
-        <option value="h-watanb">渡辺</option>
-        <option value="r-takaic">髙市</option>
-        <option value="h-yosiok">吉岡</option>
-    </select>
 </div>
 
 
-<div class="flex">
+<div class="flex" id="program_field">
 <section>
 <pre><code class="language-Java" id="source_code1">
 </code>
