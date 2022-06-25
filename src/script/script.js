@@ -106,6 +106,7 @@ window.addEventListener("load", function () {
 
   ready_button.addEventListener("click",async ()=>{
     this.document.getElementById("title").style.visibility="hidden";
+    this.document.getElementById("ans_buttons").style.visibility="visible";
     this.document.getElementById("program_field").style.visibility="visible";
 
 
