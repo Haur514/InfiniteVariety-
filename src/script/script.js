@@ -57,9 +57,9 @@ async function getNextID(user) {
 }
 
 function post(xhr,local_url,result){
-    // xhr.open('POST',local_url+"/result?id=7&user=wata -d '"+result+"'");
-    // xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    // xhr.send(result);
+    xhr.open('POST',local_url+"/result?id=7&user=wata -d '"+result+"'");
+    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    xhr.send(result);
 }
 
 function updateAns(ans) {
@@ -102,6 +102,30 @@ window.addEventListener("load", function () {
     enableNextButton();
     updateAns("Unknown");
     ret = "k";
+  });
+
+  ready_button.addEventListener("click",async ()=>{
+    this.document.getElementById("title").style.visibility="hidden";
+    this.document.getElementById("program_field").style.visibility="visible";
+
+
+    let user_name = document.getElementById("user_name").value;
+
+    // ここにPOSTの処理を挟む
+    post(xhr,local_url,ret);
+
+    let nextID = await getNextID(user_name);
+    updateSourceID(nextID);
+    let res = await getSourceCode(nextID);
+    let src1 = res["code1"];
+    let src2 = res["code2"];
+    let code1 = Prism.highlight(src1, Prism.languages.java, "java");
+    let code2 = Prism.highlight(src2, Prism.languages.java, "java");
+    document.getElementById("source_code1").innerHTML = code1;
+    document.getElementById("source_code2").innerHTML = code2;
+    updateAns("");
+
+    disableNextButton();
   });
 
   next_button.addEventListener("click", async () => {
