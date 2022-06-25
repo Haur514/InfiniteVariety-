@@ -7,6 +7,21 @@ section {
     border:solid;
 }
 
+
+.titlePage{
+    position:absolute;
+    text-align:center;
+    text-size-adjust: auto;
+    color:rgb(0, 0, 0);
+    font-weight:bold;
+    font-size:25px;
+    top:20%;
+    left:10%;
+    height:25%;
+    width:80%;
+    background-color:rgb(159, 228, 255);
+}
+
 .current_id{
     font-size:30px;
 }
@@ -15,6 +30,13 @@ section {
     font-size:30px;
     margin-left: 8em;
 
+}
+
+.ready_button{
+    font-size:30px;
+    font-weight:bold;
+    background-color: darkblue;
+    color:white;
 }
 
 .button_char{
@@ -82,6 +104,7 @@ a.btn--blue {
     width:100%;
     padding:5px;
     margin:5px;
+    visibility: hidden;
 }
 
 .srcID_user_field{
@@ -94,4 +117,6 @@ a.btn--blue {
 .user_field{
     margin-right:2%;
     margin-left:auto;
+    width: 80px;
+    font-size:30px;
 }
