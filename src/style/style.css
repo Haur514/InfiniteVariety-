@@ -5,38 +5,44 @@ section {
 	height: 100%;
     margin:2%;
     border:solid;
+    background-color:white;
+}
+
+body {
+    background-color: #E6D3D3;
 }
 
 
 .titlePage{
     position:absolute;
-    text-align:center;
     text-size-adjust: auto;
-    color:rgb(0, 0, 0);
+    font-family:"YuGothic";
+    color:#114C2A;
     font-weight:bold;
+    padding:10px;
     font-size:25px;
     top:20%;
     left:10%;
     height:25%;
     width:80%;
-    background-color:rgb(159, 228, 255);
+    background-color:#F0C851;
 }
 
 .current_id{
-    font-size:30px;
+    font-size:20px;
 }
 
 .current_ans{
-    font-size:30px;
-    margin-left: 8em;
+    font-size:20px;
+    margin-left: 1em;
 
 }
 
 .ready_button{
     font-size:30px;
     font-weight:bold;
-    background-color: darkblue;
-    color:white;
+    background-color: #114C2A;
+    color:#F0C851;
 }
 
 .button_char{
@@ -51,7 +57,7 @@ section {
     padding:1%;
     width:23%;
     padding: 10px 30px;
-    font-size:35px;
+    font-size:25px;
     font-weight:bold;
     background:rgb(61, 61, 61);
     color:white;
@@ -62,7 +68,7 @@ section {
     padding:1%;
     width:20%;
     padding: 10px 30px;
-    font-size:35px;
+    font-size:25px;
     font-weight:bold;
     background:rgb(12, 0, 73);
     color:white;
@@ -76,6 +82,7 @@ section {
 }
 
 .ans_button{
+    visibility: hidden;
     display:flex;
     width:100%;
     margin:2%;

@@ -1,2 +1,4 @@
 .DS_STORE
 .db
+script/prism.js
+style/prism.css
