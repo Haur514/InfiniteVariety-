@@ -17,6 +17,7 @@ body {
 }
 
 .titlePage{
+    display: inline-block;
     position:absolute;
     text-size-adjust: auto;
     font-family:"YuGothic";
@@ -94,7 +95,7 @@ body {
     padding:1%;
     width:20%;
     padding: 10px 30px;
-    font-size:25px;
+    font-size:1.5rem;
     font-weight:bold;
     background:rgb(12, 0, 73);
     color:white;
@@ -155,3 +156,6 @@ a.btn--blue {
     font-size:2rem;
 }
 
+.config {
+    font-size:30px;
+}

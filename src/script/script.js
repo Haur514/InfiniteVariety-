@@ -66,6 +66,10 @@ function updateAns(ans) {
   document.getElementById("selected_ans").innerHTML = ans;
 }
 
+function resizeFontSize(size){
+  document.documentElement.style.fontSize = size;
+}
+
 // async function updateSourceCode
 
 window.addEventListener("load", function () {
@@ -75,6 +79,11 @@ window.addEventListener("load", function () {
   const same_button = document.querySelector("#same_button");
   const diff_button = document.querySelector("#diff_button");
   const unknow_button = document.querySelector("#unknow_button");
+
+  const config_fontsize_bar = document.getElementById("config-fontsize-bar");
+  config_fontsize_bar.addEventListener("input",()=>{
+    resizeFontSize(config_fontsize_bar.value);
+  });
 
   const local_url = "http://localhost:3080/api/";
 
