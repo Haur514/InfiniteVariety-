@@ -13,13 +13,15 @@
 
 <div class="titlePage" id="title">
     <div class="alert_not_forget_time_measure">時間の計測を忘れないでください</div>
-    <br>
     <span color="white">回答者を選択してください：</span>
     <select id="user_name" class="user_field">
         <option value="h-watanb">渡辺</option>
         <option value="r-takaic">髙市</option>
         <option value="h-yosiok">吉岡</option>
-    </select><br><br>
+    </select><br>
+    <div class="config">
+        文字サイズを変更 小<input type="range" name="conf-fontsize" min="5" max="40" step = "1" id="config-fontsize-bar">大
+    </div>
     <div class="inline_center">
         <button type="button" id="ready_button" class="ready_button">準備完了</button>
     </div>
@@ -61,11 +63,6 @@
     <button type="button" id="next_button" class="next-btn">NEXT</button>
 </div>
 
-<br>
-
-<div class="config">
-    文字サイズを変更 小<input type="range" name="conf-fontsize" min="5" max="40" step = "1" id="config-fontsize-bar">大
-</div>
 </body>
 
 </html>
