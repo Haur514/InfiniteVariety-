@@ -24,7 +24,7 @@ body {
     color:#000000;
     font-weight:bold;
     padding:10px;
-    font-size: 2rem;
+    font-size: 1.5rem;
     bottom:10px;
     left:10%;
     width:80%;
@@ -35,16 +35,30 @@ body {
     background-color:#ffefc0;
 }
 
+.description-keymap{
+    display:block;
+    font-size:1.3rem;
+    background-color: lightgray;
+}
+
 .current_id{
     display: inline-block;
-    font-size:1.5rem;
-    width:10%;
+    width:12%;
+    background-color:#05002c;
+    border-radius: 5px;
+    padding: 0 0.3rem;
+    color:white;
+    font-weight: bold;
 }
 
 .current_ans{
     display: inline-block;
-    width:30%;
-    font-size:1.5rem;
+    width:23%;
+    background-color: rgb(0, 73, 47);
+    border-radius: 5px;
+    padding: 0 0.3rem;
+    color:white;
+    font-weight: bold;
 }
 
 .processRateBars{
@@ -147,6 +161,7 @@ a.btn--blue {
     height:1rem;
     padding:5px;
     margin:5px;
+    font-size: 1.2rem;
 }
 
 .user_field{
@@ -157,5 +172,5 @@ a.btn--blue {
 }
 
 .config {
-    font-size:30px;
+    font-size:25px;
 }

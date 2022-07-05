@@ -1,3 +1,10 @@
+const local_url = "http://localhost:3080/api/";
+const xhr = new XMLHttpRequest();
+
+let is_next_active = false;
+
+
+
 function hideNextButton() {
   document.getElementById("next_button").style.opacity = 0.3;
 }
@@ -11,11 +18,13 @@ function updateSourceID(id) {
 }
 
 function disableNextButton() {
+  is_next_active = false;
   next_button.disabled = true;
   hideNextButton();
 }
 
 function enableNextButton() {
+  is_next_active = true;
   next_button.disabled = false;
   showNextButton();
 }
@@ -70,6 +79,70 @@ function resizeFontSize(size){
   document.documentElement.style.fontSize = size;
 }
 
+function sameSelected(ret){
+  enableNextButton();
+    updateAns("Same");
+    ret.ans = "o";
+}
+
+function diffSelected(ret){
+  enableNextButton();
+  updateAns("Differ");
+  ret.ans = "x";
+}
+
+function unknownSelected(ret){
+  enableNextButton();
+  updateAns("Unknown");
+  ret.ans = "k";
+}
+
+async function nextSelected(xhr,ret){
+  let user_name = document.getElementById("user_name").value;
+
+  const local_url = "http://localhost:3080/api/";
+
+  alert(ret.user + " " + ret.ans);
+
+  // ここにPOSTの処理を挟む
+  post(xhr,local_url,ret.ans);
+
+  let nextID = await getNextID(user_name);
+  updateSourceID(nextID);
+  let res = await getSourceCode(nextID);
+  let src1 = res["code1"];
+  let src2 = res["code2"];
+  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
+  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
+  document.getElementById("source_code1").innerHTML = code1;
+  document.getElementById("source_code2").innerHTML = code2;
+  updateAns("");
+
+  disableNextButton();
+}
+
+async function keyEvent(event,isKeyActive,ret){
+  if(! isKeyActive){
+    return;
+  }
+  switch(event.key){
+    case 'z':
+      sameSelected(ret);
+    break;
+    case 'x':
+      diffSelected(ret);
+    break;
+    case 'c':
+      unknownSelected(ret);
+    break;
+    case 'Enter':
+      if(is_next_active){
+        nextSelected(xhr,ret);
+      }
+    break;
+  }
+}
+
 // async function updateSourceCode
 
 window.addEventListener("load", function () {
@@ -85,32 +158,37 @@ window.addEventListener("load", function () {
     resizeFontSize(config_fontsize_bar.value);
   });
 
-  const local_url = "http://localhost:3080/api/";
-
   init(next_button);
 
-  let xhr = new XMLHttpRequest();
+  let user_name = document.getElementById("user_name").value;
+
+  let isKeyActive = false;
 
   // hideNextButton();
 
-  let ret;
+  let ret = {
+    user : user_name,
+    ans : ""
+  };
 
   same_button.addEventListener("click", () => {
-    enableNextButton();
-    updateAns("Same");
-    ret = "o";
+    sameSelected(ret);
   });
 
   diff_button.addEventListener("click", () => {
-    enableNextButton();
-    updateAns("Differ");
-    ret = "x";
+    diffSelected(ret);
   });
 
   unknow_button.addEventListener("click", () => {
-    enableNextButton();
-    updateAns("Unknown");
-    ret = "k";
+    unknownSelected(ret);
+  });
+
+  next_button.addEventListener("click", async () => {
+    nextSelected(xhr,ret);
+  });
+
+  this.document.addEventListener("keypress",(event) => {
+    keyEvent(event,isKeyActive,ret);
   });
 
   ready_button.addEventListener("click",async ()=>{
@@ -121,8 +199,6 @@ window.addEventListener("load", function () {
 
     let user_name = document.getElementById("user_name").value;
 
-    // ここにPOSTの処理を挟む
-    post(xhr,local_url,ret);
 
     let nextID = await getNextID(user_name);
     updateSourceID(nextID);
@@ -134,26 +210,7 @@ window.addEventListener("load", function () {
     document.getElementById("source_code1").innerHTML = code1;
     document.getElementById("source_code2").innerHTML = code2;
     updateAns("");
-
-    disableNextButton();
-  });
-
-  next_button.addEventListener("click", async () => {
-    let user_name = document.getElementById("user_name").value;
-
-    // ここにPOSTの処理を挟む
-    post(xhr,local_url,ret);
-
-    let nextID = await getNextID(user_name);
-    updateSourceID(nextID);
-    let res = await getSourceCode(nextID);
-    let src1 = res["code1"];
-    let src2 = res["code2"];
-    let code1 = Prism.highlight(src1, Prism.languages.java, "java");
-    let code2 = Prism.highlight(src2, Prism.languages.java, "java");
-    document.getElementById("source_code1").innerHTML = code1;
-    document.getElementById("source_code2").innerHTML = code2;
-    updateAns("");
+    isKeyActive = true;
 
     disableNextButton();
   });
