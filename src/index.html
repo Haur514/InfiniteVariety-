@@ -14,37 +14,43 @@
 <div class="titlePage" id="title">
     <div class="alert_not_forget_time_measure">時間の計測を忘れないでください</div>
     <br>
-    <spam color="white">回答者を選択してください：</spam>
+    <span color="white">回答者を選択してください：</span>
     <select id="user_name" class="user_field">
         <option value="h-watanb">渡辺</option>
         <option value="r-takaic">髙市</option>
         <option value="h-yosiok">吉岡</option>
     </select><br><br>
-    <button type="button" id="ready_button" class="ready_button">準備完了</button>
+    <div class="inline_center">
+        <button type="button" id="ready_button" class="ready_button">準備完了</button>
+    </div>
 </div>
 
 <!-- ソースコードIDとユーザ選択をする行 -->
-<div class="srcID_user_field">
+<div class="head-bar">
     <div class="current_id">
-        現在のソースコードのID : <span id="source_id"></span>
+        ID : <span id="source_id"></span>
     </div>
     <div class="current_ans">
-        現在の解答 : <span id="selected_ans"></span>
+        Selected : <span id="selected_ans"></span>
     </div>
+    <span class="processRateBars">
+        渡辺:<div class="processRateBar"><progress id="progressBar" max="100" value="70">70%</progress></div>
+        髙市:<div class="processRateBar"><progress id="progressBar" max="100" value="70"></progress></div>
+        吉岡:<div class="processRateBar"><progress id="progressBar" max="100" value="70"></progress></div>
+    </span>
 </div>
 
-
 <div class="flex" id="program_field">
-<section>
-<pre><code class="language-Java" id="source_code1">
-</code>
-</pre>
-</section>
-<section>
-    <pre><code class="language-Java" id="source_code2">
+    <section>
+    <pre><code class="language-Java" id="source_code1">
     </code>
     </pre>
-</section>
+    </section>
+    <section>
+        <pre><code class="language-Java" id="source_code2">
+        </code>
+        </pre>
+    </section>
 </div>
 
 
@@ -53,7 +59,6 @@
     <button type="button" id="diff_button" class="btn">DIFFER</button>
     <button type="button" id="unknow_button" class="btn">UNKNOWN</button>
     <button type="button" id="next_button" class="next-btn">NEXT</button>
-
 </div>
 </body>
 
