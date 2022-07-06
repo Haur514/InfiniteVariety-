@@ -160,14 +160,14 @@ window.addEventListener("load", function () {
 
   init(next_button);
 
-  let user_name = document.getElementById("user_name").value;
+  // let user_name = document.getElementById("user_name").value;
 
   let isKeyActive = false;
 
   // hideNextButton();
 
   let ret = {
-    user : user_name,
+    user : "",
     ans : ""
   };
 
@@ -198,6 +198,7 @@ window.addEventListener("load", function () {
 
 
     let user_name = document.getElementById("user_name").value;
+    ret.user = user_name;
 
 
     let nextID = await getNextID(user_name);
