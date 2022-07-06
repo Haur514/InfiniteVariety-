@@ -189,7 +189,7 @@ div.code-toolbar > .toolbar > .toolbar-item > a,
 div.code-toolbar > .toolbar > .toolbar-item > button,
 div.code-toolbar > .toolbar > .toolbar-item > span {
   color: #bbb;
-  font-size: 0.8em;
+  font-size: 1.0rem;
   padding: 0 0.5em;
   background: #f5f2f0;
   background: rgba(224, 224, 224, 0.2);

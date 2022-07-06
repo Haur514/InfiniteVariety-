@@ -1,6 +1,12 @@
 const local_url = "http://localhost:3080/api/";
 const xhr = new XMLHttpRequest();
 
+const a = 0;
+
+let currentSrcID;
+
+let selected_ans;
+
 let is_next_active = false;
 
 
@@ -32,7 +38,7 @@ function enableNextButton() {
 async function init(next_button) {}
 
 async function getSourceCode(nextID) {
-  ret = fetch("http://localhost:3080/api/source?id=" + String(nextID), {
+  ret = fetch(`http://localhost:3080/api/source?id=${nextID}`, {
     mode: "cors",
   })
     .then((response) => {
@@ -49,7 +55,7 @@ async function getSourceCode(nextID) {
 }
 
 async function getNextID(user) {
-  ret = fetch("http://localhost:3080/api/next?user=" + user, {
+  ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/next?user=${user}`, {
     mode: "cors",
   })
     .then((response) => {
@@ -65,10 +71,19 @@ async function getNextID(user) {
   return ret;
 }
 
-function post(xhr,local_url,result){
-    xhr.open('POST',local_url+"/result?id=7&user=wata -d '"+result+"'");
-    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    xhr.send(result);
+async function post(result){
+  let data = "o";
+  let form = new FormData();
+  let user_name = document.getElementById("user_name").value;
+
+  console.log(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/result?id=${currentSrcID}&user=${user_name}&judge=${result}`);
+  
+  
+  return fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/result?id=${currentSrcID}&user=${user_name}&judge=${result}`,{
+    method: "POST"
+  }).then(res => {
+  console.log("posted");
+return 'post end'  });
 }
 
 function updateAns(ans) {
@@ -79,37 +94,36 @@ function resizeFontSize(size){
   document.documentElement.style.fontSize = size;
 }
 
-function sameSelected(ret){
+function sameSelected(){
   enableNextButton();
     updateAns("Same");
-    ret.ans = "o";
+    selected_ans = "o";
 }
 
-function diffSelected(ret){
+function diffSelected(){
   enableNextButton();
   updateAns("Differ");
-  ret.ans = "x";
+  selected_ans = "x";
 }
 
-function unknownSelected(ret){
+function unknownSelected(){
   enableNextButton();
   updateAns("Unknown");
-  ret.ans = "k";
+  selected_ans = "k";
 }
 
-async function nextSelected(xhr,ret){
+async function nextSelected(){
   let user_name = document.getElementById("user_name").value;
 
   const local_url = "http://localhost:3080/api/";
 
-  alert(ret.user + " " + ret.ans);
-
   // ここにPOSTの処理を挟む
-  post(xhr,local_url,ret.ans);
+  await post(selected_ans);
 
-  let nextID = await getNextID(user_name);
-  updateSourceID(nextID);
-  let res = await getSourceCode(nextID);
+  currentSrcID = await getNextID(user_name);
+  console.log(currentSrcID);
+  updateSourceID(currentSrcID);
+  let res = await getSourceCode(currentSrcID);
   let src1 = res["code1"];
   let src2 = res["code2"];
   let code1 = Prism.highlight(src1, Prism.languages.java, "java");
@@ -121,23 +135,23 @@ async function nextSelected(xhr,ret){
   disableNextButton();
 }
 
-async function keyEvent(event,isKeyActive,ret){
+async function keyEvent(event,isKeyActive){
   if(! isKeyActive){
     return;
   }
   switch(event.key){
     case 'z':
-      sameSelected(ret);
+      sameSelected();
     break;
     case 'x':
-      diffSelected(ret);
+      diffSelected();
     break;
     case 'c':
-      unknownSelected(ret);
+      unknownSelected();
     break;
     case 'Enter':
       if(is_next_active){
-        nextSelected(xhr,ret);
+        nextSelected();
       }
     break;
   }
@@ -146,9 +160,7 @@ async function keyEvent(event,isKeyActive,ret){
 // async function updateSourceCode
 
 window.addEventListener("load", function () {
-  // document.getElementById('src2').innerHTML='<pre class="line-numbers"><code class="language-Java" id="src2">System.out.println()</code></pre>';
   const next_button = document.querySelector("#next_button");
-  // next_button.disabled = true;
   const same_button = document.querySelector("#same_button");
   const diff_button = document.querySelector("#diff_button");
   const unknow_button = document.querySelector("#unknow_button");
@@ -160,35 +172,27 @@ window.addEventListener("load", function () {
 
   init(next_button);
 
-  // let user_name = document.getElementById("user_name").value;
-
   let isKeyActive = false;
 
-  // hideNextButton();
-
-  let ret = {
-    user : "",
-    ans : ""
-  };
 
   same_button.addEventListener("click", () => {
-    sameSelected(ret);
+    sameSelected();
   });
 
   diff_button.addEventListener("click", () => {
-    diffSelected(ret);
+    diffSelected();
   });
 
   unknow_button.addEventListener("click", () => {
-    unknownSelected(ret);
+    unknownSelected();
   });
 
   next_button.addEventListener("click", async () => {
-    nextSelected(xhr,ret);
+    nextSelected();
   });
 
   this.document.addEventListener("keypress",(event) => {
-    keyEvent(event,isKeyActive,ret);
+    keyEvent(event,isKeyActive);
   });
 
   ready_button.addEventListener("click",async ()=>{
@@ -198,12 +202,11 @@ window.addEventListener("load", function () {
 
 
     let user_name = document.getElementById("user_name").value;
-    ret.user = user_name;
 
 
-    let nextID = await getNextID(user_name);
-    updateSourceID(nextID);
-    let res = await getSourceCode(nextID);
+    currentSrcID = await getNextID(user_name);
+    updateSourceID(currentSrcID);
+    let res = await getSourceCode(currentSrcID);
     let src1 = res["code1"];
     let src2 = res["code2"];
     let code1 = Prism.highlight(src1, Prism.languages.java, "java");
