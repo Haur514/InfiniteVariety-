@@ -1,10 +1,12 @@
 # InfiniteVariety_exp_frontend
 
 ## HOW TO USE
+Please Follow These Steps.
+Don't forget to copy the DataBase.
 ```
 git clone --recursive https://github.com/Haur514/InfiniteVariety_exp_frontend
 cd Infinity_exp_frontend
 cp {path-to-db}/*.db ./backend/db/
 docker compose up
 ```
-localhost:3080にアクセスすれば利用できます．
+You can easily appreciate an optimized visualizer from [localhost:3080](http://localhost:3080)😄.
