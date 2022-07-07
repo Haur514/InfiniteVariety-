@@ -5,7 +5,7 @@ services:
     image: infinite_variety_exp-frontend
     restart: always
     ports:
-      - 3080:80
+      - 80:80
     # depends_on:
     #   backend:
     #     condition: service_healthy
