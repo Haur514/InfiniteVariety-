@@ -1,6 +1,8 @@
 # InfiniteVariety_exp_frontend
 
 ## HOW TO USE
+Please Follow These Steps.
+Don't forget to copy the DataBase.
 ```
 git clone --recursive https://github.com/Haur514/InfiniteVariety_exp_frontend
 cd Infinity_exp_frontend
