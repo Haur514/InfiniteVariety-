@@ -1,12 +1,10 @@
-const local_url = "http://localhost:3080/api/";
+const local_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}api/`;
 const xhr = new XMLHttpRequest();
 
 const a = 0;
 
 let currentSrcID;
-
 let selected_ans;
-
 let is_next_active = false;
 
 
@@ -38,7 +36,7 @@ function enableNextButton() {
 async function init(next_button) {}
 
 async function getSourceCode(nextID) {
-  ret = fetch(`http://localhost:3080/api/source?id=${nextID}`, {
+  ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/source?id=${nextID}`, {
     mode: "cors",
   })
     .then((response) => {
@@ -115,7 +113,7 @@ function unknownSelected(){
 async function nextSelected(){
   let user_name = document.getElementById("user_name").value;
 
-  const local_url = "http://localhost:3080/api/";
+  const local_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}api/`;
 
   // ここにPOSTの処理を挟む
   await post(selected_ans);
