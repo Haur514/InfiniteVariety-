@@ -1,11 +1,10 @@
 section {
-	overflow: scroll;
+	/* overflow: scroll; */
     overflow-y:auto;
+    background-color:rgb(245,243,240);
 	width: 47%;
 	height: 100%;
-    margin:2%;
     border:solid;
-    background-color:white;
 }
 
 body {
@@ -13,8 +12,35 @@ body {
     font-size:30px;
     height:100vh;
     margin:0;
-    padding:10px;
 }
+
+.b-blue{
+    background-color: darkblue;
+}
+
+.b-red{
+    background-color: darkred;
+}
+
+.b-gray{
+    background-color: darkgray;
+}
+
+.b-green{
+    background-color: darkgreen;
+}
+.b-yellow{
+    background-color: darkgoldenrod;
+}
+.code_field{
+    height:100%;
+}
+
+.code_break {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow: auto !important;
+  }
 
 .titlePage{
     display: inline-block;
@@ -96,28 +122,13 @@ body {
 .btn{
     margin:1%;
     padding:1%;
-    width:23%;
+    width:18%;
     padding: 10px 30px;
     font-size:1.5rem;
     font-weight:bold;
-    background:rgb(61, 61, 61);
     color:white;
 }
 
-.next-btn{
-    margin:1%;
-    padding:1%;
-    width:20%;
-    padding: 10px 30px;
-    font-size:1.5rem;
-    font-weight:bold;
-    background:rgb(12, 0, 73);
-    color:white;
-}
-
-.next-btn:hover{
-    opacity:0.7;
-}
 .btn:hover{
     opacity:0.7;
 }
@@ -126,7 +137,8 @@ body {
     visibility: hidden;
     display:flex;
     width:100%;
-    margin:2%;
+    margin-top:2%;
+    margin-bottom:2%;
 }
 
 .next_button{
@@ -158,10 +170,12 @@ a.btn--blue {
 .head-bar{
     display:inline-block;
     width:100%;
-    height:1rem;
-    padding:5px;
-    margin:5px;
+    height:2rem;
+    padding: 0.2rem 0.1rem;
+    margin:0;
     font-size: 1.2rem;
+    color:white;
+    background-color:rgb(45, 45, 45);
 }
 
 .user_field{
