@@ -1,7 +1,4 @@
 const local_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}api/`;
-const xhr = new XMLHttpRequest();
-
-const a = 0;
 
 let currentSrcID;
 let selected_ans;
@@ -155,6 +152,28 @@ async function keyEvent(event,isKeyActive){
   }
 }
 
+async function readySelected(){
+  document.getElementById("title").style.visibility="hidden";
+  document.getElementById("ans_buttons").style.visibility="visible";
+  document.getElementById("program_field").style.visibility="visible";
+
+
+  let user_name = document.getElementById("user_name").value;
+
+
+  currentSrcID = await getNextID(user_name);
+  updateSourceID(currentSrcID);
+  let res = await getSourceCode(currentSrcID);
+  let src1 = res["code1"];
+  let src2 = res["code2"];
+  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
+  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
+  document.getElementById("source_code1").innerHTML = code1;
+  document.getElementById("source_code2").innerHTML = code2;
+  updateAns("");
+  disableNextButton();
+}
+
 // async function updateSourceCode
 
 window.addEventListener("load", function () {
@@ -194,26 +213,7 @@ window.addEventListener("load", function () {
   });
 
   ready_button.addEventListener("click",async ()=>{
-    this.document.getElementById("title").style.visibility="hidden";
-    this.document.getElementById("ans_buttons").style.visibility="visible";
-    this.document.getElementById("program_field").style.visibility="visible";
-
-
-    let user_name = document.getElementById("user_name").value;
-
-
-    currentSrcID = await getNextID(user_name);
-    updateSourceID(currentSrcID);
-    let res = await getSourceCode(currentSrcID);
-    let src1 = res["code1"];
-    let src2 = res["code2"];
-    let code1 = Prism.highlight(src1, Prism.languages.java, "java");
-    let code2 = Prism.highlight(src2, Prism.languages.java, "java");
-    document.getElementById("source_code1").innerHTML = code1;
-    document.getElementById("source_code2").innerHTML = code2;
-    updateAns("");
+    readySelected();
     isKeyActive = true;
-
-    disableNextButton();
   });
 });
