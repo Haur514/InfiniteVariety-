@@ -69,7 +69,7 @@ body {
 
 .current_id{
     display: inline-block;
-    width:12%;
+    /* width:12%; */
     background-color:#05002c;
     border-radius: 5px;
     padding: 0 0.3rem;
@@ -79,7 +79,7 @@ body {
 
 .current_ans{
     display: inline-block;
-    width:23%;
+    /* width:23%; */
     background-color: rgb(0, 73, 47);
     border-radius: 5px;
     padding: 0 0.3rem;
@@ -89,8 +89,6 @@ body {
 
 .processRateBars{
     display: inline-block;
-    text-align:right;
-    width:55%;
     font-size:1rem;
 }
 
@@ -119,11 +117,15 @@ body {
     color:#dddddd;
 }
 
+#selected_ans{
+    display:inline-block;
+    width:8.4rem
+}
+
 .btn{
     margin:1%;
     padding:1%;
-    width:18%;
-    padding: 10px 30px;
+    width:23%;
     font-size:1.5rem;
     font-weight:bold;
     color:white;
@@ -178,11 +180,24 @@ a.btn--blue {
     background-color:rgb(45, 45, 45);
 }
 
+.cur-num{
+    display:inline-block;
+    color:black;
+    text-align: left;
+    font-weight: bold;
+    background-color: white;
+}
+
 .user_field{
     margin-right:2%;
     margin-left:auto;
     width: 6rem;
     font-size:2rem;
+}
+
+#ans-history{
+    margin:auto;
+    font-size:0.8rem;
 }
 
 .config {
