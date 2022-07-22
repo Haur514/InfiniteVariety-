@@ -45,9 +45,18 @@
         Selected : <span id="selected_ans"></span>
     </div>
     <span class="processRateBars">
-        渡辺:<div class="processRateBar"><progress id="progressBar" max="100" value="70">70%</progress></div>
+        <!-- 渡辺:<div class="processRateBar"><progress id="progressBar" max="100" value="70">70%</progress></div>
         髙市:<div class="processRateBar"><progress id="progressBar" max="100" value="70"></progress></div>
-        吉岡:<div class="processRateBar"><progress id="progressBar" max="100" value="70"></progress></div>
+        吉岡:<div class="processRateBar"><progress id="progressBar" max="100" value="70"></progress></div> -->
+        <div class="cur-num" id="h-watanb-curnum">
+            渡辺：<span id="h-watanb-prog">--</span>
+        </div>
+        <div class="cur-num" id="r-takaic-curnum">
+            髙市：<span id="r-takaic-prog">--</span>
+        </div>
+        <div class="cur-num" id="h-yosiok-curnum">
+            吉岡：<span id="h-yosiok-prog">--</span>
+        </div>
     </span>
 </div>
 
@@ -70,8 +79,11 @@
     <button type="button" id="diff_button" class="btn b-red">Diff</button>
     <button type="button" id="unknow_button" class="btn  b-gray">Unknow</button>
     <button type="button" id="next_button" class="btn b-green">Next</button>
-    <button type="buttona" id="prev_button" class="btn b-green">Prev</button>
+    <!-- <button type="buttona" id="prev_button" class="btn b-green">Prev</button> -->
 </div>
+
+<span id="ans-history">
+</span>
 
 </body>
 

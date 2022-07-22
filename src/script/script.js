@@ -112,6 +112,15 @@ async function nextSelected(){
 
   const local_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}api/`;
 
+  // 全員のnextID表示しているヘッダ部分更新
+
+  document.getElementById("h-watanb-prog").innerHTML = String(await getNextID("h-watanb"))
+  document.getElementById("r-takaic-prog").innerHTML = String(await getNextID("r-takaic"))
+  document.getElementById("h-yosiok-prog").innerHTML = String(await getNextID("h-yosiok"))
+
+
+  updateHistory(user_name,currentSrcID,selected_ans);
+
   // ここにPOSTの処理を挟む
   await post(selected_ans);
 
@@ -128,6 +137,11 @@ async function nextSelected(){
   updateAns("");
 
   disableNextButton();
+}
+
+function updateHistory(user_name,srcID,ans){
+  his = `{user_name:{${user_name}}   srcID:{${srcID}}   ans:{${ans}} date:{${new Date().toLocaleString()}}},<br>`;
+  document.getElementById("ans-history").innerHTML += his;
 }
 
 async function keyEvent(event,isKeyActive){
@@ -160,6 +174,18 @@ async function readySelected(){
 
   let user_name = document.getElementById("user_name").value;
 
+  switch(user_name){
+    case "h-watanb":
+      document.getElementById("h-watanb-curnum").style.backgroundColor = "#ffffbf";
+    break;
+    case "r-takaic":
+      document.getElementById("r-takaic-curnum").style.backgroundColor = "#ffffbf";
+    break;
+
+    case"h-yosiok":
+    document.getElementById("h-yosiok-curnum").style.backgroundColor = "#ffffbf";
+    break;
+  }
 
   currentSrcID = await getNextID(user_name);
   updateSourceID(currentSrcID);
