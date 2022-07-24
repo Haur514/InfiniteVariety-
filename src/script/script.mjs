@@ -1,4 +1,7 @@
-const local_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}api/`;
+import Prism from 'prismjs/prism';
+import 'prismjs/components/prism-java';
+import prettier from 'prettier/esm/standalone';
+import javaParser from 'prettier-plugin-java/dist/index';
 
 let currentSrcID;
 let selected_ans;
@@ -33,7 +36,7 @@ function enableNextButton() {
 async function init(next_button) {}
 
 async function getSourceCode(nextID) {
-  ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/source?id=${nextID}`, {
+  const ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/source?id=${nextID}`, {
     mode: "cors",
   })
     .then((response) => {
@@ -50,7 +53,7 @@ async function getSourceCode(nextID) {
 }
 
 async function getNextID(user) {
-  ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/next?user=${user}`, {
+  const ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/next?user=${user}`, {
     mode: "cors",
   })
     .then((response) => {
@@ -72,8 +75,8 @@ async function post(result){
   let user_name = document.getElementById("user_name").value;
 
   console.log(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/result?id=${currentSrcID}&user=${user_name}&judge=${result}`);
-  
-  
+
+
   return fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/result?id=${currentSrcID}&user=${user_name}&judge=${result}`,{
     method: "POST"
   }).then(res => {
@@ -110,8 +113,6 @@ function unknownSelected(){
 async function nextSelected(){
   let user_name = document.getElementById("user_name").value;
 
-  const local_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}api/`;
-
   // 全員のnextID表示しているヘッダ部分更新
 
   document.getElementById("h-watanb-prog").innerHTML = String(await getNextID("h-watanb"))
@@ -128,8 +129,8 @@ async function nextSelected(){
   console.log(currentSrcID);
   updateSourceID(currentSrcID);
   let res = await getSourceCode(currentSrcID);
-  let src1 = res["code1"];
-  let src2 = res["code2"];
+  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
   let code1 = Prism.highlight(src1, Prism.languages.java, "java");
   let code2 = Prism.highlight(src2, Prism.languages.java, "java");
   document.getElementById("source_code1").innerHTML = code1;
@@ -140,7 +141,7 @@ async function nextSelected(){
 }
 
 function updateHistory(user_name,srcID,ans){
-  his = `{user_name:{${user_name}}   srcID:{${srcID}}   ans:{${ans}} date:{${new Date().toLocaleString()}}},<br>`;
+  const his = `{user_name:{${user_name}}   srcID:{${srcID}}   ans:{${ans}} date:{${new Date().toLocaleString()}}},<br>`;
   document.getElementById("ans-history").innerHTML += his;
 }
 
@@ -190,8 +191,8 @@ async function readySelected(){
   currentSrcID = await getNextID(user_name);
   updateSourceID(currentSrcID);
   let res = await getSourceCode(currentSrcID);
-  let src1 = res["code1"];
-  let src2 = res["code2"];
+  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
   let code1 = Prism.highlight(src1, Prism.languages.java, "java");
   let code2 = Prism.highlight(src2, Prism.languages.java, "java");
   document.getElementById("source_code1").innerHTML = code1;
