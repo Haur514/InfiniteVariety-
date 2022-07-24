@@ -33,6 +33,15 @@ function enableNextButton() {
   showNextButton();
 }
 
+function isUserSelectedCollectly(){
+  let user_name = document.getElementById("user_name").value;
+  if(user_name == ""){
+    alert("ユーザを選択してください");
+    return false;
+  }
+  return true;
+}
+
 async function init(next_button) {}
 
 async function getSourceCode(nextID) {
@@ -240,7 +249,9 @@ window.addEventListener("load", function () {
   });
 
   ready_button.addEventListener("click",async ()=>{
-    readySelected();
-    isKeyActive = true;
+    if(isUserSelectedCollectly()){
+      readySelected();
+      isKeyActive = true;
+    }
   });
 });
