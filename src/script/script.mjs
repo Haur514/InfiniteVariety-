@@ -7,6 +7,36 @@ let currentSrcID;
 let selected_ans;
 let is_next_active = false;
 
+// 進捗を取得
+async function updateProgressRate(){
+  let ratio = await getProgressRate("h-yosiok");
+  // 全員のnextID表示しているヘッダ部分更新
+  document.getElementById("h-watanb-prog").innerHTML = String(await getProgressRate("h-watanb"))
+  document.getElementById("r-takaic-prog").innerHTML = String(await getProgressRate("r-takaic"))
+  document.getElementById("h-yosiok-prog").innerHTML = String(await getProgressRate("h-yosiok"))
+  
+}
+async function getProgressRate(user){
+  let ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/status?user=${user}`, {
+    mode: "cors",
+  }).then((response) => {
+      if (!response.ok) {
+        console.log("NODATA");
+        throw new Error();
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      console.log(parseInt(data["answered"])/parseInt(data["toAnswer"]));
+      return parseInt(data["answered"])/parseInt(data["toAnswer"]);
+    }).then(function(value){
+      return value
+    });
+  return (await ret).toFixed(2);
+}
+
+
 
 
 function hideNextButton() {
@@ -122,11 +152,6 @@ function unknownSelected(){
 async function nextSelected(){
   let user_name = document.getElementById("user_name").value;
 
-  // 全員のnextID表示しているヘッダ部分更新
-
-  document.getElementById("h-watanb-prog").innerHTML = String(await getNextID("h-watanb"))
-  document.getElementById("r-takaic-prog").innerHTML = String(await getNextID("r-takaic"))
-  document.getElementById("h-yosiok-prog").innerHTML = String(await getNextID("h-yosiok"))
 
 
   updateHistory(user_name,currentSrcID,selected_ans);
@@ -145,6 +170,8 @@ async function nextSelected(){
   document.getElementById("source_code1").innerHTML = code1;
   document.getElementById("source_code2").innerHTML = code2;
   updateAns("");
+
+  updateProgressRate();
 
   disableNextButton();
 }
@@ -182,6 +209,7 @@ async function readySelected(){
   document.getElementById("program_field").style.visibility="visible";
 
 
+  updateProgressRate();
   let user_name = document.getElementById("user_name").value;
 
   switch(user_name){
