@@ -3,6 +3,7 @@ services:
     build:
       context: ./
     image: infinite_variety_exp-frontend
+    working_dir: /frontend/
     restart: always
     ports:
       - 80:80

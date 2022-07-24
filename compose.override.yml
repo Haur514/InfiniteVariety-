@@ -2,11 +2,19 @@ services:
   frontend:
     build:
       target: dev
+    ports:
+      - 5173:5173
     volumes:
       - type: bind
         source: ./src/
-        target: /etc/nginx/html/
+        target: /frontend/src/
+      - type: bind
+        source: ./vite.config.js
+        target: /frontend/vite.config.js
     command:
-      - nginx-debug
-      - -g
-      - daemon off;
+      - npm
+      - run
+      - dev
+      - --
+      - --host
+      - '0.0.0.0'
