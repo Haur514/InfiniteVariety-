@@ -1,7 +1,9 @@
 import Prism from 'prismjs/prism';
-import 'prismjs/components/prism-java';
-import prettier from 'prettier/esm/standalone';
 import javaParser from 'prettier-plugin-java/dist/index';
+import prettier from 'prettier/esm/standalone';
+import 'prismjs/components/prism-java';
+
+
 
 let currentSrcID;
 let selected_ans;
@@ -27,9 +29,7 @@ async function getProgressRate(user){
       return response.json();
     })
     .then((data) => {
-      console.log(data);
-      console.log(parseInt(data["answered"])/parseInt(data["toAnswer"]));
-      return parseInt(data["answered"])/parseInt(data["toAnswer"]);
+      return parseInt(data["answered"])/parseInt(data["toAnswer"])*100;
     }).then(function(value){
       return value
     });
