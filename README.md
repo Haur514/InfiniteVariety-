@@ -10,7 +10,7 @@ cd Infinity_exp_frontend
 cp {path-to-db}/*.db ./backend/db/
 docker compose up
 ```
-Then you can easily appreciate the optimized visualizer from [localhost:3080](http://localhost:5173)😄.
+Then you can easily appreciate the optimized visualizer from [localhost:5173](http://localhost:5173)😄.
 
 ## FEATURE OF THIS APP
 
