@@ -14,7 +14,7 @@ Then you can easily appreciate the optimized visualizer from [localhost:5173](ht
 
 ## FEATURE OF THIS APP
 
-Comparing your code with the code of a skilled programmer is essential for improving your programming skills.
+Comparing your code with the one skilled programmer wrote is essential for improving your programming skills.
 However, there are few tools dedicated to comparing two source codes.<br>
 Why don't I just split the screen and display the two?<br>
 What a pain in the ass!<br>
