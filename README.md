@@ -26,4 +26,4 @@ Using this App is the first step to be a proficient programmer!
 ![image](https://user-images.githubusercontent.com/82633228/181409652-2bf02859-d051-4488-855b-1de7ebaca4ac.png)
 Notice : Some mosaic to protect the copyright of the code.
 
-## Looking will lead you nowhere. JUST TRY!!!
+## Inaction will lead you nowhere. JUST TRY!!!
