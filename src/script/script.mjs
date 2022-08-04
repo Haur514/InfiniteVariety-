@@ -31,12 +31,30 @@ async function getProgressRate(user){
     .then((data) => {
       return parseInt(data["answered"])/parseInt(data["toAnswer"])*100;
     }).then(function(value){
-      return value
+      return value;
     });
   return (await ret).toFixed(2);
 }
 
+async function src_id_selected(){
+  let srcID = document.getElementById("selected_src_id").value;
 
+  currentSrcID = srcID
+  console.log(currentSrcID);
+  updateSourceID(currentSrcID);
+  let res = await getSourceCode(currentSrcID);
+  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
+  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
+  document.getElementById("source_code1").innerHTML = code1;
+  document.getElementById("source_code2").innerHTML = code2;
+  updateAns("");
+
+  updateProgressRate();
+
+  disableNextButton();
+}
 
 
 function hideNextButton() {
@@ -151,9 +169,6 @@ function unknownSelected(){
 
 async function nextSelected(){
   let user_name = document.getElementById("user_name").value;
-
-
-
   updateHistory(user_name,currentSrcID,selected_ans);
 
   // ここにPOSTの処理を挟む
@@ -245,6 +260,7 @@ window.addEventListener("load", function () {
   const same_button = document.querySelector("#same_button");
   const diff_button = document.querySelector("#diff_button");
   const unknow_button = document.querySelector("#unknow_button");
+  const src_select_button = document.querySelector("#select_src_id_button")
 
   const config_fontsize_bar = document.getElementById("config-fontsize-bar");
   config_fontsize_bar.addEventListener("input",()=>{
@@ -255,6 +271,9 @@ window.addEventListener("load", function () {
 
   let isKeyActive = false;
 
+  src_select_button.addEventListener("click",()=>{
+    src_id_selected();
+  }); 
 
   same_button.addEventListener("click", () => {
     sameSelected();
