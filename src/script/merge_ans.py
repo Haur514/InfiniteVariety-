@@ -3,15 +3,21 @@ import json
 import csv
 from oauth2client.service_account import ServiceAccountCredentials
 
-h_yosiok_ans_pair_dict = {}
+h_yosiok_ans_pair_dict = dict()
 h_watanb_ans_pair_dict = dict()
 r_takaic_ans_pair_dict = dict()
 
-def print_in_gsheet(ws):
+def print_in_gsheet():
     row = 1
+    global h_yosiok_ans_pair_dict
+    h_yosiok_ans_pair_dict = get_ans_pair_dict("h-yosiok")
+    global h_watanb_ans_pair_dict 
+    h_watanb_ans_pair_dict = get_ans_pair_dict("h-watanb")
+    global r_takaic_ans_pair_dict 
+    r_takaic_ans_pair_dict = get_ans_pair_dict("r-takaic")
     with open("./result/ans20220804.csv",'w') as f:
         writer = csv.writer(f)
-        for i in get_ans_does_not_match():
+        for i in get_pairId_everyone_answered():
             writer.writerow([i,h_yosiok_ans_pair_dict[i],h_watanb_ans_pair_dict[i],r_takaic_ans_pair_dict[i]])
             row += 1
         
@@ -27,7 +33,7 @@ def get_pairId_everyone_answered():
     h_yosiok = get_pairId_someone_answered("h-yosiok")
     h_watanb = get_pairId_someone_answered("h-watanb")
     r_takaic = get_pairId_someone_answered("r-takaic")
-    return list((set(h_yosiok) & set(h_watanb))&set(r_takaic))
+    return sorted(list(set(h_yosiok) & set(h_watanb) & set(r_takaic)))
     
 
 def get_ans_does_not_match():
@@ -64,11 +70,11 @@ def connect_gspread(jsonf,key):
     worksheet = gc.open_by_key(SPREADSHEET_KEY).sheet1
     return worksheet
 
-jsonf = "infinityvariable-8406b6a6e81e.json"
-spread_sheet_key = "1N-CrjxUpEHv1gNiF7TBk0Ae8YPkZYMKg7g3CShtSotA"
-ws = connect_gspread(jsonf,spread_sheet_key)
+# jsonf = "infinityvariable-8406b6a6e81e.json"
+# spread_sheet_key = "1N-CrjxUpEHv1gNiF7TBk0Ae8YPkZYMKg7g3CShtSotA"
+# ws = connect_gspread(jsonf,spread_sheet_key)
 
-print_in_gsheet(ws)
+print_in_gsheet()
 
 # #(2) Google Spread Sheets上の値を更新
 # #(２−１)あるセルの値を更新（行と列を指定）
