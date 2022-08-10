@@ -29,3 +29,4 @@ dist-ssr
 *.sw?
 
 ./src/script/result/*
+./src/script/alignment/*
