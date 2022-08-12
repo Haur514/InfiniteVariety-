@@ -1,4 +1,8 @@
 import Prism from 'prismjs/prism';
+import "prismjs/plugins/toolbar/prism-toolbar.min.css";
+import "prismjs/plugins/toolbar/prism-toolbar.min";
+import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min";
+
 import javaParser from 'prettier-plugin-java/dist/index';
 import prettier from 'prettier/esm/standalone';
 import 'prismjs/components/prism-java';
