@@ -9,6 +9,7 @@ import 'prismjs/components/prism-java';
 
 import * as Diff from 'diff';
 import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim';
+import 'highlight.js/styles/atom-one-light.css';
 import 'diff2html/bundles/css/diff2html.min.css';
 
 
@@ -23,7 +24,7 @@ async function updateProgressRate(){
   document.getElementById("h-watanb-prog").innerHTML = String(await getProgressRate("h-watanb"))
   document.getElementById("r-takaic-prog").innerHTML = String(await getProgressRate("r-takaic"))
   document.getElementById("h-yosiok-prog").innerHTML = String(await getProgressRate("h-yosiok"))
-  
+
 }
 async function getProgressRate(user){
   let ret = fetch(`${window.location.protocol}//${window.location.host}${window.location.pathname}api/status?user=${user}`, {
@@ -260,12 +261,19 @@ async function updateSourceCode(srcID) {
 async function updateDiffCode(leftCode, rightCode) {
   const element = document.getElementById('diff_editor');
 
-  const diff = Diff.createPatch("", leftCode, rightCode, "", "");
+  const diff = Diff.createPatch("diff.java", leftCode, rightCode, "", "");
   const diff2htmlUi = new Diff2HtmlUI(element, diff, {
     outputFormat: 'side-by-side',
     drawFileList: false,
+    fileListToggle: false,
+    fileContentToggle: false,
   });
   diff2htmlUi.draw();
+  for (const e of element.querySelectorAll('.d2h-file-wrapper')) {
+    const attr = e.getAttribute('data-lang');
+    e.setAttribute('data-lang', attr.trim());
+  }
+  diff2htmlUi.highlightCode();
 }
 
 window.addEventListener("load", function () {
