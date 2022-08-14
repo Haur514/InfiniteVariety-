@@ -2,7 +2,7 @@ section {
 	/* overflow: scroll; */
     overflow-y:auto;
     background-color:rgb(245,243,240);
-	width: 47%;
+	width: 50%;
 	height: 100%;
     border:solid;
 }
@@ -198,4 +198,9 @@ a.btn--blue {
 
 .config {
     font-size:25px;
+}
+
+#diff_editor {
+    margin: 5px;
+    padding: 5px;
 }
