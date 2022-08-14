@@ -204,3 +204,7 @@ a.btn--blue {
     margin: 5px;
     padding: 5px;
 }
+
+.d2h-file-side-diff {
+    margin-bottom: 0 !important;
+}
