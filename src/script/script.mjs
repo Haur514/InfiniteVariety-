@@ -7,6 +7,9 @@ import javaParser from 'prettier-plugin-java/dist/index';
 import prettier from 'prettier/esm/standalone';
 import 'prismjs/components/prism-java';
 
+import * as Diff from 'diff';
+import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim';
+import 'diff2html/bundles/css/diff2html.min.css';
 
 
 let currentSrcID;
@@ -44,19 +47,11 @@ async function src_id_selected(){
   let srcID = document.getElementById("selected_src_id").value;
 
   currentSrcID = srcID
-  console.log(currentSrcID);
   updateSourceID(currentSrcID);
-  let res = await getSourceCode(currentSrcID);
-  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
-  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
-  document.getElementById("source_code1").innerHTML = code1;
-  document.getElementById("source_code2").innerHTML = code2;
+  const {left, right} = await updateSourceCode(currentSrcID);
+  updateDiffCode(left, right);
   updateAns("");
-
   updateProgressRate();
-
   disableNextButton();
 }
 
@@ -181,13 +176,8 @@ async function nextSelected(){
   currentSrcID = await getNextID(user_name);
   console.log(currentSrcID);
   updateSourceID(currentSrcID);
-  let res = await getSourceCode(currentSrcID);
-  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
-  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
-  document.getElementById("source_code1").innerHTML = code1;
-  document.getElementById("source_code2").innerHTML = code2;
+  const {left, right} = await updateSourceCode(currentSrcID);
+  updateDiffCode(left, right);
   updateAns("");
 
   updateProgressRate();
@@ -246,18 +236,37 @@ async function readySelected(){
 
   currentSrcID = await getNextID(user_name);
   updateSourceID(currentSrcID);
-  let res = await getSourceCode(currentSrcID);
-  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
-  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
-  document.getElementById("source_code1").innerHTML = code1;
-  document.getElementById("source_code2").innerHTML = code2;
+  const {left, right} = await updateSourceCode(currentSrcID);
+  updateDiffCode(left, right);
   updateAns("");
   disableNextButton();
 }
 
-// async function updateSourceCode
+async function updateSourceCode(srcID) {
+  let res = await getSourceCode(srcID);
+
+  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+
+  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
+  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
+
+  document.getElementById("source_code1").innerHTML = code1;
+  document.getElementById("source_code2").innerHTML = code2;
+
+  return {left: src1, right: src2}
+}
+
+async function updateDiffCode(leftCode, rightCode) {
+  const element = document.getElementById('diff_editor');
+
+  const diff = Diff.createPatch("", leftCode, rightCode, "", "");
+  const diff2htmlUi = new Diff2HtmlUI(element, diff, {
+    outputFormat: 'side-by-side',
+    drawFileList: false,
+  });
+  diff2htmlUi.draw();
+}
 
 window.addEventListener("load", function () {
   const next_button = document.querySelector("#next_button");
