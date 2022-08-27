@@ -1,16 +1,5 @@
-import Prism from 'prismjs/prism';
-import "prismjs/plugins/toolbar/prism-toolbar.min.css";
-import "prismjs/plugins/toolbar/prism-toolbar.min";
-import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min";
-
 import javaParser from 'prettier-plugin-java/dist/index';
 import prettier from 'prettier/esm/standalone';
-import 'prismjs/components/prism-java';
-
-import * as Diff from 'diff';
-import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim';
-import 'highlight.js/styles/atom-one-light.css';
-import 'diff2html/bundles/css/diff2html.min.css';
 
 import * as monaco from 'monaco-editor'
 const leftModel = monaco.editor.createModel("", "java");
@@ -327,7 +316,7 @@ window.addEventListener("load", function () {
 
   src_select_button.addEventListener("click",()=>{
     src_id_selected();
-  }); 
+  });
 
   same_button.addEventListener("click", () => {
     sameSelected();
