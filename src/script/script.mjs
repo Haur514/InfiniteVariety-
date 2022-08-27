@@ -40,6 +40,7 @@ const rightEditor = monaco.editor.create(document.getElementById("right_editor")
 const diffEditor = monaco.editor.createDiffEditor(document.getElementById("diff_editor"), {
   ...editorOptions,
   enableSplitViewResizing: false,
+  lineDecorationsWidth: 27,
 });
 
 let currentSrcID;
