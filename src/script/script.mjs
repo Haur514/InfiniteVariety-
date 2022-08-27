@@ -9,10 +9,17 @@ self.MonacoEnvironment = {
   },
 };
 
+const rootFontSize = (() => {
+  const root = document.querySelector(":root");
+  const style = window.getComputedStyle(root).getPropertyValue('font-size');
+  return parseFloat(style);
+})();
+
 const leftModel = monaco.editor.createModel("", "java");
 const rightModel = monaco.editor.createModel("", "java");
 const editorOptions = {
   automaticLayout: true,
+  fontSize: rootFontSize,
   overviewRulerBorder: false,
   readOnly: true,
   renderOverviewRuler: false,
