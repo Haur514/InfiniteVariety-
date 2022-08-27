@@ -2,6 +2,13 @@ import javaParser from 'prettier-plugin-java/dist/index';
 import prettier from 'prettier/esm/standalone';
 
 import * as monaco from 'monaco-editor'
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+self.MonacoEnvironment = {
+  getWorker: function (_moduleId, _label) {
+    return new editorWorker();
+  },
+};
+
 const leftModel = monaco.editor.createModel("", "java");
 const rightModel = monaco.editor.createModel("", "java");
 const editorOptions = {
