@@ -61,19 +61,16 @@
     </span>
     <input type="number" id="selected_src_id">
     <button id="select_src_id_button">表示</button>
+
+    <button class="switch" id="is_diff_mode" role="switch" aria-checked="false" aria-readonly="true">
+        <span>diff</span>
+        <span>code</span>
+    </button>
 </div>
 
-<div class="flex" id="program_field">
-    <section>
-    <pre class="code_field"><code class="language-Java" id="source_code1">
-    </code>
-    </pre>
-    </section>
-    <section>
-        <pre class="code_field"><code class="language-Java code_field" id="source_code2">
-        </code>
-        </pre>
-    </section>
+<div id="program_field">
+    <div class="code_field" id="left_editor"></div>
+    <div class="code_field" id="right_editor"></div>
 </div>
 
 <div id="diff_editor"></div>

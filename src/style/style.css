@@ -8,7 +8,7 @@ section {
 }
 
 body {
-    background-color: #f9f9f9;
+    background-color: #eee;
     font-size:30px;
     height:100vh;
     margin:0;
@@ -34,6 +34,7 @@ body {
 }
 .code_field{
     height:100%;
+    width: 50%;
 }
 
 .code_break {
@@ -159,14 +160,6 @@ a.btn--blue {
     background-color: rgb(23, 0, 154);
 }
 
-.flex{
-    display:flex;
-    height:75%;
-    padding:5px;
-    margin:5px;
-    visibility: hidden;
-}
-
 .head-bar{
     height:2rem;
     padding: 0.2rem 0.1rem;
@@ -200,11 +193,41 @@ a.btn--blue {
     font-size:25px;
 }
 
+#program_field {
+    display: none;
+    justify-content: space-around;
+    height:75%;
+    padding:5px;
+    margin:5px;
+}
 #diff_editor {
+    display: none;
+    height:75%;
     margin: 5px;
     padding: 5px;
 }
 
-.d2h-file-side-diff {
-    margin-bottom: 0 !important;
+button.switch {
+    margin: 0;
+    padding: 0.3rem;
+    display: inline;
+    vertical-align: middle;
+    text-align: center;
+}
+button.switch span {
+    padding: 0.3rem;
+    pointer-events: none;
+}
+[role="switch"][aria-checked="false"] :first-child,
+[role="switch"][aria-checked="true"] :last-child {
+    color: #bbd;
+}
+[role="switch"][aria-checked="false"] :last-child,
+[role="switch"][aria-checked="true"] :first-child {
+    background: #262;
+    color: #eef;
+}
+label.switch {
+    user-select: none;
+    vertical-align: middle;
 }

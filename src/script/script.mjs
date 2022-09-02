@@ -1,17 +1,85 @@
-import Prism from 'prismjs/prism';
-import "prismjs/plugins/toolbar/prism-toolbar.min.css";
-import "prismjs/plugins/toolbar/prism-toolbar.min";
-import "prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min";
-
 import javaParser from 'prettier-plugin-java/dist/index';
 import prettier from 'prettier/esm/standalone';
-import 'prismjs/components/prism-java';
 
-import * as Diff from 'diff';
-import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim';
-import 'highlight.js/styles/atom-one-light.css';
-import 'diff2html/bundles/css/diff2html.min.css';
+import * as monaco from 'monaco-editor'
+import * as java from 'monaco-editor/esm/vs/basic-languages/java/java'
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 
+const customJavaTokenizer = () => {
+  const t = structuredClone(java.language); // deep copy
+
+  t.tokenizer.root.unshift(
+    [/[A-Z][\w\$]*/, 'type.identifier' ],
+    [/@symbols/, {
+      cases: {
+        '@operators': 'operator',
+        '@default': '',
+      }
+    }],
+  );
+
+  return t;
+};
+
+monaco.languages.register({id: "customizedJava"});
+monaco.languages.setMonarchTokensProvider("customizedJava", customJavaTokenizer());
+monaco.editor.defineTheme('customizedVsTheme', {
+  base: 'vs-dark',
+  inherit: true,
+  rules: [
+    { token: 'operator', foreground: 'da7bb4' },
+    { token: 'delimiter', foreground: 'a1a1a1' },
+  ],
+  colors: {}
+});
+
+self.MonacoEnvironment = {
+  getWorker: function (_moduleId, _label) {
+    return new editorWorker();
+  },
+};
+
+const rootFontSize = (() => {
+  const root = document.querySelector(":root");
+  const style = window.getComputedStyle(root).getPropertyValue('font-size');
+  return parseFloat(style);
+})();
+
+const leftModel = monaco.editor.createModel("", "customizedJava");
+const rightModel = monaco.editor.createModel("", "customizedJava");
+const editorOptions = {
+  automaticLayout: true,
+  fontSize: rootFontSize,
+  language: "customizedJava",
+  overviewRulerBorder: false,
+  readOnly: true,
+  renderOverviewRuler: false,
+  scrollBeyondLastLine: false,
+  scrollbar: {
+    alwaysConsumeMouseWheel: false,
+    verticalScrollbarSize: 8,
+    horizontalScrollbarSize: 8,
+  },
+  tabSize: 2,
+  theme: "customizedVsTheme",
+};
+const leftEditor = monaco.editor.create(document.getElementById("left_editor"), {
+  ...editorOptions,
+  minimap: {
+    enabled: false,
+  },
+});
+const rightEditor = monaco.editor.create(document.getElementById("right_editor"), {
+  ...editorOptions,
+  minimap: {
+    enabled: false,
+  },
+});
+const diffEditor = monaco.editor.createDiffEditor(document.getElementById("diff_editor"), {
+  ...editorOptions,
+  enableSplitViewResizing: false,
+  lineDecorationsWidth: 27,
+});
 
 let currentSrcID;
 let selected_ans;
@@ -49,8 +117,7 @@ async function src_id_selected(){
 
   currentSrcID = srcID
   updateSourceID(currentSrcID);
-  const {left, right} = await updateSourceCode(currentSrcID);
-  updateDiffCode(left, right);
+  await updateSourceCode(currentSrcID);
   updateAns("");
   updateProgressRate();
   disableNextButton();
@@ -177,8 +244,7 @@ async function nextSelected(){
   currentSrcID = await getNextID(user_name);
   console.log(currentSrcID);
   updateSourceID(currentSrcID);
-  const {left, right} = await updateSourceCode(currentSrcID);
-  updateDiffCode(left, right);
+  await updateSourceCode(currentSrcID);
   updateAns("");
 
   updateProgressRate();
@@ -216,8 +282,8 @@ async function keyEvent(event,isKeyActive){
 async function readySelected(){
   document.getElementById("title").style.visibility="hidden";
   document.getElementById("ans_buttons").style.visibility="visible";
-  document.getElementById("program_field").style.visibility="visible";
-
+  document.getElementById("is_diff_mode").setAttribute("aria-readonly", "false");
+  setModelToEditor();
 
   updateProgressRate();
   let user_name = document.getElementById("user_name").value;
@@ -237,8 +303,7 @@ async function readySelected(){
 
   currentSrcID = await getNextID(user_name);
   updateSourceID(currentSrcID);
-  const {left, right} = await updateSourceCode(currentSrcID);
-  updateDiffCode(left, right);
+  await updateSourceCode(currentSrcID);
   updateAns("");
   disableNextButton();
 }
@@ -246,34 +311,37 @@ async function readySelected(){
 async function updateSourceCode(srcID) {
   let res = await getSourceCode(srcID);
 
-  let src1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let src2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  let code1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  let code2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
 
-  let code1 = Prism.highlight(src1, Prism.languages.java, "java");
-  let code2 = Prism.highlight(src2, Prism.languages.java, "java");
-
-  document.getElementById("source_code1").innerHTML = code1;
-  document.getElementById("source_code2").innerHTML = code2;
-
-  return {left: src1, right: src2}
+  leftModel.setValue(code1);
+  rightModel.setValue(code2);
 }
 
-async function updateDiffCode(leftCode, rightCode) {
-  const element = document.getElementById('diff_editor');
+function setModelToCodeEditors() {
+  document.getElementById("diff_editor").style.display = "none";
+  document.getElementById("program_field").style.display = "flex";
+  leftEditor.setModel(leftModel);
+  rightEditor.setModel(rightModel);
+}
 
-  const diff = Diff.createPatch("diff.java", leftCode, rightCode, "", "");
-  const diff2htmlUi = new Diff2HtmlUI(element, diff, {
-    outputFormat: 'side-by-side',
-    drawFileList: false,
-    fileListToggle: false,
-    fileContentToggle: false,
+function setModelToDiffEditor() {
+  document.getElementById("diff_editor").style.display = "block";
+  document.getElementById("program_field").style.display = "none";
+  diffEditor.setModel({
+    original: leftModel,
+    modified: rightModel,
   });
-  diff2htmlUi.draw();
-  for (const e of element.querySelectorAll('.d2h-file-wrapper')) {
-    const attr = e.getAttribute('data-lang');
-    e.setAttribute('data-lang', attr.trim());
+}
+
+function setModelToEditor() {
+  const e = document.querySelector("#is_diff_mode");
+  if (e.getAttribute("aria-readonly") == "true") return;
+  if (e.getAttribute("aria-checked") == "true") {
+    setModelToDiffEditor();
+  } else {
+    setModelToCodeEditors();
   }
-  diff2htmlUi.highlightCode();
 }
 
 window.addEventListener("load", function () {
@@ -281,7 +349,9 @@ window.addEventListener("load", function () {
   const same_button = document.querySelector("#same_button");
   const diff_button = document.querySelector("#diff_button");
   const unknow_button = document.querySelector("#unknow_button");
-  const src_select_button = document.querySelector("#select_src_id_button")
+  const src_select_button = document.querySelector("#select_src_id_button");
+  const switches = document.querySelectorAll(".switch");
+  const is_diff_mode_switch = document.querySelector("#is_diff_mode");
 
   const config_fontsize_bar = document.getElementById("config-fontsize-bar");
   config_fontsize_bar.addEventListener("input",()=>{
@@ -294,7 +364,7 @@ window.addEventListener("load", function () {
 
   src_select_button.addEventListener("click",()=>{
     src_id_selected();
-  }); 
+  });
 
   same_button.addEventListener("click", () => {
     sameSelected();
@@ -321,5 +391,21 @@ window.addEventListener("load", function () {
       readySelected();
       isKeyActive = true;
     }
+  });
+
+  switches.forEach((s) => {
+    s.addEventListener("click", (event) => {
+      const t = event.target;
+      if (t.getAttribute("aria-readonly") == "true") return;
+      if (t.getAttribute("aria-checked") == "true") {
+        t.setAttribute("aria-checked", "false");
+      } else {
+        t.setAttribute("aria-checked", "true");
+      }
+    });
+  });
+
+  is_diff_mode_switch.addEventListener("click", (event) => {
+    setModelToEditor();
   });
 });
