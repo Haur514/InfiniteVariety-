@@ -29,8 +29,6 @@ const editorOptions = {
     verticalScrollbarSize: 8,
     horizontalScrollbarSize: 8,
   },
-  wordWrap: "on",
-  wrappingIndent: "indent"
 };
 const leftEditor = monaco.editor.create(document.getElementById("left_editor"), {
   ...editorOptions,
