@@ -2,7 +2,37 @@ import javaParser from 'prettier-plugin-java/dist/index';
 import prettier from 'prettier/esm/standalone';
 
 import * as monaco from 'monaco-editor'
+import * as java from 'monaco-editor/esm/vs/basic-languages/java/java'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+
+const customJavaTokenizer = () => {
+  const t = structuredClone(java.language); // deep copy
+
+  t.tokenizer.root.unshift(
+    [/[A-Z][\w\$]*/, 'type.identifier' ],
+    [/@symbols/, {
+      cases: {
+        '@operators': 'operator',
+        '@default': '',
+      }
+    }],
+  );
+
+  return t;
+};
+
+monaco.languages.register({id: "customizedJava"});
+monaco.languages.setMonarchTokensProvider("customizedJava", customJavaTokenizer());
+monaco.editor.defineTheme('customizedVsTheme', {
+  base: 'vs-dark',
+  inherit: true,
+  rules: [
+    { token: 'operator', foreground: 'da7bb4' },
+    { token: 'delimiter', foreground: 'a1a1a1' },
+  ],
+  colors: {}
+});
+
 self.MonacoEnvironment = {
   getWorker: function (_moduleId, _label) {
     return new editorWorker();
@@ -15,11 +45,12 @@ const rootFontSize = (() => {
   return parseFloat(style);
 })();
 
-const leftModel = monaco.editor.createModel("", "java");
-const rightModel = monaco.editor.createModel("", "java");
+const leftModel = monaco.editor.createModel("", "customizedJava");
+const rightModel = monaco.editor.createModel("", "customizedJava");
 const editorOptions = {
   automaticLayout: true,
   fontSize: rootFontSize,
+  language: "customizedJava",
   overviewRulerBorder: false,
   readOnly: true,
   renderOverviewRuler: false,
@@ -29,6 +60,7 @@ const editorOptions = {
     verticalScrollbarSize: 8,
     horizontalScrollbarSize: 8,
   },
+  theme: "customizedVsTheme",
 };
 const leftEditor = monaco.editor.create(document.getElementById("left_editor"), {
   ...editorOptions,
