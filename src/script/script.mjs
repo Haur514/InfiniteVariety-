@@ -60,6 +60,7 @@ const editorOptions = {
     verticalScrollbarSize: 8,
     horizontalScrollbarSize: 8,
   },
+  tabSize: 2,
   theme: "customizedVsTheme",
 };
 const leftEditor = monaco.editor.create(document.getElementById("left_editor"), {
