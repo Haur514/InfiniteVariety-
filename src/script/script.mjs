@@ -1,6 +1,3 @@
-import javaParser from 'prettier-plugin-java/dist/index';
-import prettier from 'prettier/esm/standalone';
-
 import * as monaco from 'monaco-editor'
 import * as java from 'monaco-editor/esm/vs/basic-languages/java/java'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
@@ -311,8 +308,8 @@ async function readySelected(){
 async function updateSourceCode(srcID) {
   let res = await getSourceCode(srcID);
 
-  let code1 = prettier.format(res["code1"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
-  let code2 = prettier.format(res["code2"], { parser: 'java', plugins: [javaParser], entrypoint: "methodDeclaration" });
+  const code1 = res["code1"];
+  const code2 = res["code2"];
 
   leftModel.setValue(code1);
   rightModel.setValue(code2);
