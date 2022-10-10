@@ -28,6 +28,4 @@ Notice : Some mosaic to protect the copyright of the code.
 
 ## Inaction will lead you nowhere. JUST TRY!!!
 
-## 動作例
-https://user-images.githubusercontent.com/82633228/192076514-283a0aee-11ce-4c70-a6b6-9de3342328f2.mp4
 
