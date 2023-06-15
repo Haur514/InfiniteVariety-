@@ -1,11 +1,5 @@
 # InfiniteVariety_exp_frontend
 
-
-## 動作例
-https://user-images.githubusercontent.com/82633228/192076514-283a0aee-11ce-4c70-a6b6-9de3342328f2.mp4
-
-
-
 ## HOW TO USE
 
 Please Follow These Steps.
