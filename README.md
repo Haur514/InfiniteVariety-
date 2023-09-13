@@ -6,7 +6,7 @@ Please Follow These Steps.
 Don't forget to copy the DataBase.
 ```
 git clone --recursive https://github.com/Haur514/InfiniteVariety_exp_frontend
-cd Infinity_exp_frontend
+cd InfiniteVariety_exp_frontend
 cp {path-to-db}/*.db ./backend/db/
 docker compose up
 ```
